@@ -5,4 +5,6 @@ doc
 pkg
 tmp
 web
+Setup.receipt
+Seutp.config
 *.lock
