@@ -1,0 +1,36 @@
+--- 
+
+name:
+  autoload
+
+version:
+  0.1.0
+
+title:
+  Autoload
+
+summary: 
+  What Ruby does but how Ruby should do it.
+
+description:
+  Ruby is officially deprecating autoload. Well, some people may prefer
+  to keep it! Moreover, Ruby's implementation has had a bug in it
+  for-like-ever. This gem fixes that problem too.
+
+requirements:
+  - qed (test)
+  - ae  (test)
+
+authors:
+  - name: trans
+    email: transfire@gmail.com
+
+resources:
+  homepage: "http://dotruby.github.com"
+  source: "http://github.com/dotruby/version"
+
+copyrights: 
+  - year: 2013
+    holder: Rubyworks
+    license: BSD-2-Clause
+

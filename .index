@@ -1,0 +1,44 @@
+---
+type: ruby
+revision: 2013
+sources:
+- Index.yml
+authors:
+- name: trans
+  email: transfire@gmail.com
+organizations: []
+requirements:
+- groups:
+  - test
+  development: true
+  name: qed
+- groups:
+  - test
+  development: true
+  name: ae
+conflicts: []
+alternatives: []
+resources:
+- type: homepage
+  uri: http://dotruby.github.com
+  label: Homepage
+- type: source
+  uri: http://github.com/dotruby/version
+  label: Source Code
+repositories: []
+categories: []
+paths:
+  load:
+  - lib
+copyrights:
+- holder: Rubyworks
+  year: 2013
+  license: BSD-2-Clause
+name: autoload
+title: Autoload
+version: 0.1.0
+summary: What Ruby does but how Ruby should do it.
+description: Ruby is officially deprecating autoload. Well, some people may prefer
+  to keep it! Moreover, Ruby's implementation has had a bug in it for-like-ever. This
+  gem fixes that problem too.
+date: '2013-01-05'
