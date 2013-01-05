@@ -36,6 +36,8 @@ class Object
       paths.each do |path|
         require(path)
       end
+      super(name) unless const_defined?(name)
+      const_get(name)
     else
       super(name)
     end
