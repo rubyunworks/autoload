@@ -2,11 +2,13 @@
 type: ruby
 revision: 2013
 sources:
-- Index.yml
+- var
 authors:
 - name: trans
   email: transfire@gmail.com
-organizations: []
+organizations:
+- name: Rubyworks
+  website: http://rubyworks.github.org
 requirements:
 - groups:
   - test
@@ -19,11 +21,11 @@ requirements:
 conflicts: []
 alternatives: []
 resources:
-- type: homepage
-  uri: http://dotruby.github.com
+- type: home
+  uri: http://rubyworks.github.com/autoload
   label: Homepage
-- type: source
-  uri: http://github.com/dotruby/version
+- type: code
+  uri: http://github.com/rubyworks/autoload
   label: Source Code
 repositories: []
 categories: []
@@ -34,11 +36,13 @@ copyrights:
 - holder: Rubyworks
   year: 2013
   license: BSD-2-Clause
-name: autoload
+summary: What Ruby does but how Ruby should do it.
 title: Autoload
 version: 0.2.0
-summary: What Ruby does but how Ruby should do it.
-description: Ruby is officially deprecating autoload. Well, some people may prefer
-  to keep it! Moreover, Ruby's implementation has had a bug in it for-like-ever. This
-  gem fixes that problem too.
-date: '2013-01-05'
+name: autoload
+description: ! 'Ruby is officially deprecating autoload. Well, some people may prefer
+
+  to keep it! Moreover, Ruby''s implementation has had a bug in it
+
+  for-like-ever. This gem fixes that problem too.'
+date: '2013-01-06'

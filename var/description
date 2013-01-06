@@ -1,0 +1,3 @@
+Ruby is officially deprecating autoload. Well, some people may prefer
+to keep it! Moreover, Ruby's implementation has had a bug in it
+for-like-ever. This gem fixes that problem too.
