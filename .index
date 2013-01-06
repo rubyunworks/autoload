@@ -36,7 +36,7 @@ copyrights:
   license: BSD-2-Clause
 name: autoload
 title: Autoload
-version: 0.1.0
+version: 0.2.0
 summary: What Ruby does but how Ruby should do it.
 description: Ruby is officially deprecating autoload. Well, some people may prefer
   to keep it! Moreover, Ruby's implementation has had a bug in it for-like-ever. This
