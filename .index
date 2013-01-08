@@ -38,11 +38,11 @@ copyrights:
   license: BSD-2-Clause
 summary: What Ruby does but how Ruby should do it.
 title: Autoload
-version: 0.2.0
+version: 0.3.0
 name: autoload
 description: ! 'Ruby is officially deprecating autoload. Well, some people may prefer
 
   to keep it! Moreover, Ruby''s implementation has had a bug in it
 
   for-like-ever. This gem fixes that problem too.'
-date: '2013-01-06'
+date: '2013-01-08'
