@@ -29,12 +29,12 @@ end
 module Setup
   META_EXTENSION_DIR = '.setup'
   FILETYPES = %w( bin lib ext data etc man doc )
-  INSTALL_RECORD = 'Setup.receipt'
-  CONFIG_FILE = 'Setup.config'
+  INSTALL_RECORD = '.setup/installed_files'
+  CONFIG_FILE    = '.setup/config.yml'
 end
 module Setup
   class Project
-    ROOT_MARKER = '{setup.rb,script/setup,meta/,MANIFEST,lib/}'
+    ROOT_MARKER = '{.setup/,.index,setup.rb,script/setup,script/setup.rb,lib/}'
     def rootdir
       @rootdir ||= (
         root = Dir[File.join(Dir.pwd, ROOT_MARKER)].first
