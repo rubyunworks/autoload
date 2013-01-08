@@ -49,9 +49,10 @@ to load it's own scripts.
 ## [Limitations](#limitations)
 
 * Autoload is not thread safe. You need thread safe autoload? Submit a patch, please.
+* Other libraries that redefine Module#const_missing may clobber autload's.
 
 
-## [Copying](#copying)
+## [Copyrights](#copyrights)
 
 Autoload is copyrighted open-source software.
 
