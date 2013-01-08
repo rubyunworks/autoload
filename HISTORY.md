@@ -1,5 +1,18 @@
 # RELEASE HISTORY
 
+## 0.3.0 / 2013-01-08
+
+Turns out calling `super` in `#const_missing` was a bug. Instead it needed to
+alias the old `#const_missing` and call that instead. Also, turned out the
+`Object.const_missing` definition wasn't needed. Seems Toplevel's proxy knows
+to look in Module for that.
+
+Changes:
+
+* Use alias instead of super call in Module#cont_missing.
+* Remove Object.const_missing.
+
+
 ## 0.2.0 / 2013-01-06
 
 Fixed broken namespace autoloads --damn thing seems rather tricker
