@@ -65,12 +65,41 @@ class Module
   #   The constants name.
   #
   def const_missing(name)
-    if paths = $AUTOLOAD.delete([self, name])
+    parent = nil
+
+    if $AUTOLOAD.key?([self, name])
+      parent = self
+    end
+
+    unless parent
+      parts = self.name.to_s.split('::')
+      parts.pop
+      until parts.empty?
+        const = Object.const_get(parts.join('::'))
+        if $AUTOLOAD.key?([const, name])
+          parent = const
+          break
+        end
+        parts.pop
+      end
+    end
+
+    unless parent
+      ancestors.each do |anc|
+        if $AUTOLOAD.key?([anc, name])
+          parent = anc
+          break
+        end
+      end
+    end
+
+    if parent
+      paths = $AUTOLOAD.delete([parent, name])
       paths.each do |path|
         require(path)
       end
-      const_missing_without_autoload(name) unless const_defined?(name)
-      const_get(name)
+      const_missing_without_autoload(name) unless parent.const_defined?(name)
+      parent.const_get(name)
     else
       const_missing_without_autoload(name)
     end
