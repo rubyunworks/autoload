@@ -51,7 +51,7 @@ to load it's own scripts.
 * Autoload is not thread safe. You need thread safe autoload? Submit a patch, please.
 
 
-## [Copyrights](#copyrights)
+## [Copying](#copying)
 
 Autoload is copyrighted open-source software.
 
