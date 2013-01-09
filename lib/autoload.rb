@@ -64,19 +64,19 @@ class Module
   # @param [#to_sym] cname 
   #   The constants name.
   #
-  def const_missing(name)
+  def const_missing(cname)
     parent = nil
 
-    if $AUTOLOAD.key?([self, name])
+    if $AUTOLOAD.key?([self, cname])
       parent = self
     end
 
     unless parent
-      parts = self.name.to_s.split('::')
+      parts = name.to_s.split('::')
       parts.pop
       until parts.empty?
         const = Object.const_get(parts.join('::'))
-        if $AUTOLOAD.key?([const, name])
+        if $AUTOLOAD.key?([const, cname])
           parent = const
           break
         end
@@ -86,22 +86,30 @@ class Module
 
     unless parent
       ancestors.each do |anc|
-        if $AUTOLOAD.key?([anc, name])
+        if $AUTOLOAD.key?([anc, cname])
           parent = anc
           break
         end
       end
     end
 
+    unless parent
+      if name.nil?
+        if /#<Class:(.*?)>/ =~ self.inspect
+          parent = Object.const_get($1) rescue nil
+        end
+      end
+    end
+
     if parent
-      paths = $AUTOLOAD.delete([parent, name])
+      paths = $AUTOLOAD.delete([parent, cname])
       paths.each do |path|
         require(path)
       end
-      const_missing_without_autoload(name) unless parent.const_defined?(name)
-      parent.const_get(name)
+      const_missing_without_autoload(cname) unless parent.const_defined?(cname)
+      parent.const_get(cname)
     else
-      const_missing_without_autoload(name)
+      const_missing_without_autoload(cname)
     end
   end
 
