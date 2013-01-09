@@ -58,19 +58,24 @@ class Module
   alias :const_missing_without_autoload :const_missing
 
   #
-  # Check the $AUTOLOAD table for a `[self, name]` entry. If present,
-  # require file and try to get the constant again.
+  # Check the $AUTOLOAD table for expected constant. If present, require paths
+  # associated with it and then try to get the constant again.
   #
   # @param [#to_sym] cname 
   #   The constants name.
   #
+  # @return [Object] Constant's value.
+  #
   def const_missing(cname)
     parent = nil
 
+    # if constant is expected in this module
     if $AUTOLOAD.key?([self, cname])
       parent = self
     end
 
+    # if constant is expected within this modules nesting
+    # (too bad https://bugs.ruby-lang.org/issues/3773 was rejected)
     unless parent
       parts = name.to_s.split('::')
       parts.pop
@@ -84,6 +89,7 @@ class Module
       end
     end
 
+    # if constant is expected in this modules ancestors.
     unless parent
       ancestors.each do |anc|
         if $AUTOLOAD.key?([anc, cname])
@@ -93,6 +99,8 @@ class Module
       end
     end
 
+    # if module has no name, try to parse out a namespace from #insepct.
+    # (yes, this is a hack!)
     unless parent
       if name.nil?
         if /#<Class:(.*?)>/ =~ self.inspect
@@ -106,12 +114,11 @@ class Module
       paths.each do |path|
         require(path)
       end
-      const_missing_without_autoload(cname) unless parent.const_defined?(cname)
-      parent.const_get(cname)
+      #const_missing_without_autoload(cname) unless parent.const_defined?(cname)
+      parent.const_get(cname) rescue const_missing_without_autoload(cname)
     else
       const_missing_without_autoload(cname)
     end
   end
 
 end
-
