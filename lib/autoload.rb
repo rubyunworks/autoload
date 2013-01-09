@@ -16,6 +16,18 @@ def self.autoload(cname, path)
   $AUTOLOAD[[Object, cname.to_sym]] << path
 end
 
+#
+# Returns files paths to load if name is registered as autoload.
+#
+# @param [#to_sym] cname
+#   The constant's name.
+#
+# @return [Array] Paths that would be required.
+#
+def self.autoload?(cname)
+  $AUTOLOAD[[Object, cname.to_sym]]
+end
+
 module Kernel
   #
   # Instance level autoload method.
@@ -35,6 +47,18 @@ module Kernel
   def autoload(cname, path)
     $AUTOLOAD[[self.class, cname.to_sym]] << path
   end
+
+  #
+  # Returns files paths to load if name is registered as autoload.
+  #
+  # @param [#to_sym] cname
+  #   The constant's name.
+  #
+  # @return [Array] Paths that would be required.
+  #
+  def self.autoload?(cname)
+    $AUTOLOAD[[self.class, cname.to_sym]]
+  end
 end
 
 class Module
@@ -42,7 +66,7 @@ class Module
   # Module/Class level autoload method.
   #
   # @param [#to_sym] cname 
-  #   The constants name.
+  #   The constant's name.
   #
   # @param [String] path
   #   File path to require.
@@ -51,6 +75,18 @@ class Module
   #
   def autoload(cname, path)
     $AUTOLOAD[[self, cname.to_sym]] << path
+  end
+
+  #
+  # Returns files paths to load if name is registered as autoload.
+  #
+  # @param [#to_sym] cname
+  #   The constant's name.
+  #
+  # @return [Array] Paths that would be required.
+  #
+  def self.autoload?(cname)
+    $AUTOLOAD[[self, cname.to_sym]]
   end
 
  private
