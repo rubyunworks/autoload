@@ -13,7 +13,7 @@ $AUTOLOAD = Hash.new{ |h, k| h[k] = [] }
 # @return [String] The $AUTOLOAD table.
 #
 def self.autoload(cname, path)
-  $AUTOLOAD[[Object, cname.to_sym]] << path
+  $AUTOLOAD["Object::#{cname}".to_sym] << path
 end
 
 #
@@ -25,7 +25,7 @@ end
 # @return [Array] Paths that would be required.
 #
 def self.autoload?(cname)
-  $AUTOLOAD[[Object, cname.to_sym]]
+  $AUTOLOAD["Object::#{cname}".to_sym]
 end
 
 module Kernel
@@ -45,7 +45,7 @@ module Kernel
   # @return [String] The $AUTOLOAD table.
   #
   def autoload(cname, path)
-    $AUTOLOAD[[self.class, cname.to_sym]] << path
+    self.class.autoload(cname, path)
   end
 
   #
@@ -57,7 +57,7 @@ module Kernel
   # @return [Array] Paths that would be required.
   #
   def self.autoload?(cname)
-    $AUTOLOAD[[self.class, cname.to_sym]]
+    self.class.autoload?(cname, path)
   end
 end
 
@@ -74,7 +74,7 @@ class Module
   # @return [String] The $AUTOLOAD table.
   #
   def autoload(cname, path)
-    $AUTOLOAD[[self, cname.to_sym]] << path
+    $AUTOLOAD["#{name}::#{cname}".to_sym] << path
   end
 
   #
@@ -86,7 +86,7 @@ class Module
   # @return [Array] Paths that would be required.
   #
   def self.autoload?(cname)
-    $AUTOLOAD[[self, cname.to_sym]]
+    $AUTOLOAD["#{name}::#{cname}".to_sym]
   end
 
  private
@@ -103,55 +103,46 @@ class Module
   # @return [Object] Constant's value.
   #
   def const_missing(cname)
-    parent = nil
+    key, term, search, key = nil, name, []
 
-    # if constant is expected in this module
-    if $AUTOLOAD.key?([self, cname])
-      parent = self
+    # if module has no name, try to parse out a namespace from #insepct.
+    # (yes, this is a hack!)
+    unless term
+      if /#<Class:(.*?)>/ =~ self.inspect
+        term = $1
+      end
     end
 
-    # if constant is expected within this modules nesting
+    # constant might be in the module nesting
     # (too bad https://bugs.ruby-lang.org/issues/3773 was rejected)
-    unless parent
-      parts = name.to_s.split('::')
-      parts.pop
+    if term
+      parts = term.to_s.split('::')
       until parts.empty?
-        const = Object.const_get(parts.join('::'))
-        if $AUTOLOAD.key?([const, cname])
-          parent = const
-          break
-        end
+        search << parts.join('::')
         parts.pop
       end
     end
 
-    # if constant is expected in this modules ancestors.
-    unless parent
-      ancestors.each do |anc|
-        if $AUTOLOAD.key?([anc, cname])
-          parent = anc
-          break
-        end
+    # constant might be in ancestors
+    search += ancestors.map{ |anc| anc.name }
+
+    # look for match in $AUTOLOAD table
+    search.each do |const| 
+      if $AUTOLOAD.key?("#{const}::#{cname}".to_sym)
+        key = "#{const}::#{cname}".to_sym
+        break
       end
     end
 
-    # if module has no name, try to parse out a namespace from #insepct.
-    # (yes, this is a hack!)
-    unless parent
-      if name.nil?
-        if /#<Class:(.*?)>/ =~ self.inspect
-          parent = Object.const_get($1) rescue nil
-        end
+    if key
+      paths = $AUTOLOAD.delete(key)
+      paths.each{ |path|  require(path) }
+      begin
+        eval(key.to_s, TOPLEVEL_BINDING)
+        #Object.const_get(key)  # Ruby 2.0+
+      rescue NameError
+        const_missing_without_autoload(cname)
       end
-    end
-
-    if parent
-      paths = $AUTOLOAD.delete([parent, cname])
-      paths.each do |path|
-        require(path)
-      end
-      #const_missing_without_autoload(cname) unless parent.const_defined?(cname)
-      parent.const_get(cname) rescue const_missing_without_autoload(cname)
     else
       const_missing_without_autoload(cname)
     end
