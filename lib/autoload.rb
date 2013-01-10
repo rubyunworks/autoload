@@ -125,6 +125,8 @@ class Module
 
     # constant might be in ancestors
     search += ancestors.map{ |anc| anc.name }
+    search << "Object" #Object.ancestors.map{ |anc| anc.name }
+    search.uniq!
 
     # look for match in $AUTOLOAD table
     search.each do |const| 
