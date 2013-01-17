@@ -11,6 +11,12 @@ Offical word has it [autoload is dead](http://www.ruby-forum.com/topic/3036681).
 But like James Brown, **"Autoload is alive!"**
 
 
+## Limitations
+
+Unfortunately it appears that it is impossible to get a 100% conforming
+implementation in pure-Ruby. See http://www.ruby-forum.com/topic/205612
+
+
 ## [Instructions](#instructions)
 
 It works just like the good old `autoload` we have always loved.
