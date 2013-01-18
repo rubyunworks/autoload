@@ -151,3 +151,14 @@ class Module
   end
 
 end
+
+class Object
+  # Using the inherited callback may take care of the class
+  # creation case.
+  def self.inherited(subclass)
+    name = subclass.name
+    if name
+      const_missing(name) if $AUTOLOAD.key?(name.to_sym)
+    end
+  end
+end

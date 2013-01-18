@@ -1,15 +1,25 @@
 # Broken 
 
-Unfortunately, here is what will not work. And there seems to way to overcome.
+Unfortunately, here is what will not work. And there seems to be no way
+to overcome.
 
-    autoload :Broken, 'broken'
+    autoload :BrokenModule, 'broken'
 
-    module ::Broken
+    module ::BrokenModule
     end
 
-    ::Broken.broke?
+    ::BrokenModule.broke?
 
-The problem is that `module Broken`, or `class Broken` for that matter, will
-not trigger the `const_missing` hook. Whereas Ruby's built-in autoload would
-be triggered.
+The problem is that `module Broken` will not trigger the `const_missing` hook.
+Whereas Ruby's built-in autoload would be triggered.
+
+On the other hand, we were able to use the `Object.inherited` callback to deal
+with the same issue with `class`.
+
+    autoload :BrokenClass, 'broken'
+
+    module ::BrokenClass
+    end
+
+    ::BrokenClass.broke?
 

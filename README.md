@@ -14,7 +14,9 @@ But like James Brown, **"Autoload is alive!"**
 ## Limitations
 
 Unfortunately it appears that it is impossible to get a 100% conforming
-implementation in pure-Ruby. See http://www.ruby-forum.com/topic/205612
+implementation in pure-Ruby. See http://www.ruby-forum.com/topic/205612.
+The issue it with `module Foo` and `class Foo` syntax. Ruby's autoload
+is triggered by these, but `const_missing` is not.
 
 
 ## [Instructions](#instructions)
